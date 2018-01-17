@@ -39,12 +39,6 @@ public class Prescription {
 	@Column(name = "patientAge")
 	private int patientAge;
 	
-//	private int xyz;
-//	
-//	public Prescription() {
-//		xyz = user_id;
-//		
-//	}
 	
 	public int getUserid() {
 		return userid;

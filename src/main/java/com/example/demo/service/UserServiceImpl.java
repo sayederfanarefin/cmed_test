@@ -50,13 +50,21 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<Prescription> findPrescriptionByUserId(int user_id) {
-		// TODO Auto-generated method stub
-		System.out.println("inside user services");
-		System.out.println(user_id);
 		
 		return prescriptionRepository.findByUserid(user_id);
 	}
-
 	
+	@Override
+	public void deletePrescription(Prescription prescription) {
+		
+		//prescriptionRepository.save(prescription);
+		prescriptionRepository.delete(prescription);
+	}
+	
+	@Override
+	public Prescription findByPrescriptionId(int id) {
+		
+		return prescriptionRepository.findById(id);
+	}
 
 }

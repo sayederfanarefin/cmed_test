@@ -9,7 +9,8 @@ import com.example.demo.Model.Prescription;
 
 @Repository("prescriptionRepository")
 public interface PrescriptionRepository extends JpaRepository<Prescription, Integer> {
-	Prescription findById(String prescription_id);
+	Prescription findById(int id);
 	Prescription findByMedicines(String Medicines);
 	List<Prescription> findByUserid(int user_id);
+	
 }

@@ -9,8 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.Model.User;
@@ -66,18 +68,12 @@ public class LoginController {
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
-		//modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
-		//modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+		
 		modelAndView.setViewName("admin/home");
 		
-		//System.out.println("HOME Paise");
+
 		List<Prescription> p = userService.findPrescriptionByUserId(user.getId());
-//		if(p==null) {
-//			System.out.println("HOME Paise but p null");
-//		}else {
-//			System.out.println("HOME Paise  p o paise ");
-//			System.out.println(p.get(0).getPatientName());
-//		}
+
 		modelAndView.addObject("results", p);
 		return modelAndView;
 	}
@@ -87,12 +83,12 @@ public class LoginController {
 	public ModelAndView createPres(){
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+//		User user = userService.findUserByEmail(auth.getName());
+//		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
 		//modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
 		modelAndView.setViewName("admin/createPres");
 		
-		System.out.println("createPres Paise");
+		
 		return modelAndView;
 	}
 	
@@ -112,10 +108,54 @@ public class LoginController {
 			modelAndView.addObject("successMessage", "Prescription has been added successfully");
 			modelAndView.addObject("prescription", new Prescription());
 			modelAndView.setViewName("/admin/createPres");
-			//System.out.println("createPres Paise -- PoST" + String.valueOf(user.getId()));
+			
 		}
 		return modelAndView;
 	}
 	
+	@RequestMapping(value = "/admin/deletePres", method = RequestMethod.GET)
+	public String deletePrescription(@RequestParam(name="prescription_id")int prescription_id) {
+		
+		Prescription pp = userService.findByPrescriptionId(prescription_id);
+		userService.deletePrescription(pp);
+	    return "redirect:/admin/home";
+	}
+	
+	
+	@RequestMapping(value = "/admin/editPres", method = RequestMethod.GET)
+	public ModelAndView editPres(@RequestParam(name="prescription_id")int prescription_id) {
+		Prescription pp = userService.findByPrescriptionId(prescription_id);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("admin/editPres");
+		modelAndView.addObject("editing_pres", pp);
+		
+	    return modelAndView;
+	}
+	
 
+	@RequestMapping(value = "/admin/editPres", method = RequestMethod.POST)
+	public String editPres(@Valid Prescription prescription, BindingResult bindingResult) {
+		//ModelAndView modelAndView = new ModelAndView();
+		
+		if (bindingResult.hasErrors()) {
+			//modelAndView.setViewName("Edit Prescription");
+		} else {
+			
+			System.out.println(prescription.getPatientName());
+			System.out.println(prescription.getPatientAge());
+			
+
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			User user = userService.findUserByEmail(auth.getName());
+			
+			prescription.setUserid(user.getId());
+			
+			userService.savePrescription(prescription);
+			//modelAndView.addObject("successMessage", "Updated successfully");
+			
+			
+		}
+		 return "redirect:/admin/home";
+	}
+	
 }

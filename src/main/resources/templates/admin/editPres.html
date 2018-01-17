@@ -5,7 +5,7 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-	<title>HOME</title>
+	<title>Edit Prescription</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -44,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <h2>HOME</h2>
+                <h2>Edit Prescription</h2>
             </div>
             <!-- /.navbar-header -->
 
@@ -107,47 +107,81 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">My Prescription</h1>
-                    
-                     <div class="table-responsive">          
-  							
-                    
-                    <table class="table">
-                    <tr>
-					    <th>Patient Name</th>
-					    <th>Patient Age</th> 
-					    <th>Patient Gender</th> 
-					    <th>Medicine</th>
-					    <th>Diagnosis</th>
-					    <th>Prescription Date</th>
-					    <th>Next Visit</th>
-					    <th>Actions</th>
-    
-  					</tr>
-				    <tr th:each="r : ${results}">
-				        <td th:text="${r.patientName}">1</td>
-				        <td th:text="${r.patientAge}">1</td>
-				        <td th:text="${r.patientGender}">1</td>
-				        <td th:text="${r.medicines}">1</td>
-				        <td th:text="${r.diagnosis}">1</td>
-				        <td th:text="${r.prescriptionDate}">1</td>
-				        <td th:text="${r.nextVisit}">1</td>
-				        <td>
-
-						<a th:href="@{/admin/editPres(prescription_id=${r.id})}" class="btn btn-primary btn-xs btn-block">Edit</a>
-				       	
-				        <a th:href="@{/admin/deletePres(prescription_id=${r.id})}" class="btn btn-danger btn-xs btn-block">Delete</a>
-				        </td>
-				        
-				    </tr>
-					</table>
-                    </div>
-                    
-                   
+                    <h1 class="page-header">Edit Prescription</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            
+            <div class="row">
+                                <div class="col-lg-6 col-lg-offset-1">
+                                    <form autocomplete="off" action="#" th:action="@{/admin/editPres}"
+					th:object="${prescription}" method="post" class="form-horizontal"
+					role="form">
+                                        
+                                <input class="form-control"  th:value="${editing_pres.id}" type="hidden" name="id" id="id" > 
+                                       
+                                        <div class="form-group">
+                                        <label>Prescription Date *</label>
+                                        
+                                            <input class="form-control" th:value="${editing_pres.prescriptionDate}" name="prescriptionDate" id="prescriptionDate" type="date" required>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>Patient Name * </label>
+                                            <input class="form-control"  th:value="${editing_pres.patientName}" type="text" name="patientName" id="patientName" required>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>Patient Age * </label>
+                                            <input class="form-control"  th:value="${editing_pres.patientAge}" name="patientAge" id="patientAge" type="number" required>
+                                        </div>
+                                        
+                                        
+                                        
+                                        <div class="form-group">
+                                        
+                                        
+                                        <label>Patient Gender * </label>
+                                        <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="patientGender" id="patientGenderMale" value="male"  th:checked="${editing_pres.patientGender}" required>
+  <label class="form-check-label" for="inlineRadio1">Male</label>
+</div>
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="patientGender" id="patientGenderFemale" value="female" th:checked="${editing_pres.patientGender}" required>
+  <label class="form-check-label" for="inlineRadio2">Female</label>
+</div>
+
+</div>
+
+<div class="form-group">
+                                       <label>Diagnosis</label>     
+                                            <textarea class="form-control" rows="3" th:text="${editing_pres.diagnosis}" name="diagnosis" id = "diagnosis"></textarea>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>Medicines </label>
+                                            <textarea class="form-control" rows="3" th:text="${editing_pres.medicines}" name="medicines" id = "medicines"></textarea>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                        <label>Next Visit Date</label>
+                                        
+                                            <input class="form-control" th:value="${editing_pres.nextVisit}" name="nextVisit" id="nextVisit" type="date" >
+                                        </div>
+                                        
+                                        <div class="form-group">
+						<div align="center" >
+							<button type="submit" class="btn btn-primary btn-block">Update prescription</button>
+						</div>
+					</div>
+					
+					<span th:utext="${successMessage}"></span>
+                                        
+                                        
+                         </form>
+                         </div>
+                         </div>
            
         </div>
         <!-- /#page-wrapper -->

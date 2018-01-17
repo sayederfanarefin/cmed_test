@@ -13,5 +13,7 @@ public interface UserService {
 	public void saveUser(User user);
 	public void savePrescription(Prescription prescription);
 	public List<Prescription> findPrescriptionByUserId(int user_id);
+	public void deletePrescription(Prescription prescription);
 	
+	public Prescription findByPrescriptionId(int id);
 }
